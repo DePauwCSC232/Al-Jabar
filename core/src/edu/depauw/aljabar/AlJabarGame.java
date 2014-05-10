@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class AlJabarGame extends ApplicationAdapter {
@@ -20,6 +21,10 @@ public class AlJabarGame extends ApplicationAdapter {
 												// home screen
 	public static ButtonStyle[] bStyles;
 	public static Button playButton;
+	public static Button passButton;
+	public static Button lastButton;
+	public static Table[] player;
+	public static Drawable highlight;
 
 	public void create() {
 		Skin rbySkin = new Skin();
@@ -45,35 +50,39 @@ public class AlJabarGame extends ApplicationAdapter {
 
 		rbySkin.add("b000Up", new Texture("b000.png"));
 		rbySkin.add("b000Dn", new Texture("b000.png"));
-		rbySkin.add("b000Ck", new Texture("b000Sel.png"));
+		rbySkin.add("b000Ck", new Texture("b000SelA.png"));
 
 		rbySkin.add("b001Up", new Texture("b001.png"));
 		rbySkin.add("b001Dn", new Texture("b001.png"));
-		rbySkin.add("b001Ck", new Texture("b001Sel.png"));
+		rbySkin.add("b001Ck", new Texture("b001SelA.png"));
 
 		rbySkin.add("b010Up", new Texture("b010.png"));
 		rbySkin.add("b010Dn", new Texture("b010.png"));
-		rbySkin.add("b010Ck", new Texture("b010Sel.png"));
+		rbySkin.add("b010Ck", new Texture("b010SelA.png"));
 
 		rbySkin.add("b011Up", new Texture("b011.png"));
 		rbySkin.add("b011Dn", new Texture("b011.png"));
-		rbySkin.add("b011Ck", new Texture("b011Sel.png"));
+		rbySkin.add("b011Ck", new Texture("b011SelA.png"));
 
 		rbySkin.add("b100Up", new Texture("b100.png"));
 		rbySkin.add("b100Dn", new Texture("b100.png"));
-		rbySkin.add("b100Ck", new Texture("b100Sel.png"));
+		rbySkin.add("b100Ck", new Texture("b100SelA.png"));
 
 		rbySkin.add("b101Up", new Texture("b101.png"));
 		rbySkin.add("b101Dn", new Texture("b101.png"));
-		rbySkin.add("b101Ck", new Texture("b101Sel.png"));
+		rbySkin.add("b101Ck", new Texture("b101SelA.png"));
 
 		rbySkin.add("b110Up", new Texture("b110.png"));
 		rbySkin.add("b110Dn", new Texture("b110.png"));
-		rbySkin.add("b110Ck", new Texture("b110Sel.png"));
+		rbySkin.add("b110Ck", new Texture("b110SelA.png"));
 
 		rbySkin.add("b111Up", new Texture("b111.png"));
 		rbySkin.add("b111Dn", new Texture("b111.png"));
-		rbySkin.add("b111Ck", new Texture("b111Sel.png"));
+		rbySkin.add("b111Ck", new Texture("b111SelA.png"));
+		
+		rbySkin.add("highlight", new Texture("highlight.png"));
+		
+		highlight = rbySkin.getDrawable("highlight"); 
 
 		stage = new Stage(new StretchViewport(300, 200));
 		Gdx.input.setInputProcessor(stage);
@@ -336,14 +345,14 @@ public class AlJabarGame extends ApplicationAdapter {
 				for (Button b : player1.selected) {
 					b.setChecked(false);
 					b.setVisible(false);
+					b.setStyle(bStyles[Util.getColor(b)]);
 				}
 				
 				for (Button b : state.center.selected) {
 					b.setChecked(false);
 					b.setVisible(false);
-					
-					PlayerColor pc = (PlayerColor) b.getUserObject();
-					int color = pc.color;
+					int color = Util.getColor(b);
+					b.setStyle(bStyles[color]);
 
 					player1.button[color][player1.count[color]].setVisible(true);
 					player1.count[color]++;
@@ -382,12 +391,15 @@ public class AlJabarGame extends ApplicationAdapter {
 				
 				player1.selected.clear();
 				state.center.selected.clear();
+				state.nextPlayer();
+				playButton.setVisible(false);
 			}
 		});
 
 		ButtonStyle passStyle = new ButtonStyle(rbySkin.getDrawable("passUp"),
 				rbySkin.getDrawable("passDn"), rbySkin.getDrawable("passCk"));
-		Button passButton = new Button(passStyle);
+		passButton = new Button(passStyle);
+		passButton.setVisible(false);
 
 		passButton.addListener(new ClickListener() {
 			@Override
@@ -400,7 +412,7 @@ public class AlJabarGame extends ApplicationAdapter {
 		leftMid.add(playButton).width(50).height(40);
 		leftMid.add(passButton).width(50).height(40);
 
-		Table[] player = new Table[4];
+		player = new Table[4];
 		for (int i = 0; i < 4; i++) {
 			Table pt = new Table();
 
@@ -424,6 +436,7 @@ public class AlJabarGame extends ApplicationAdapter {
 
 					});
 					b.setVisible(col < state.player[i].count[row]);
+					b.setDisabled(i != 0);
 					pt.add(b).width(10).height(10);
 					state.player[i].button[row][col] = b;
 				}
@@ -436,6 +449,8 @@ public class AlJabarGame extends ApplicationAdapter {
 		leftDown.add(player[3]);
 		rightUp.add(player[1]);
 		rightDown.add(player[2]);
+		
+		player[0].setBackground(highlight);
 
 		left.add(leftUp);
 		left.row();
@@ -460,7 +475,17 @@ public class AlJabarGame extends ApplicationAdapter {
 
 		ButtonStyle lastStyle = new ButtonStyle(rbySkin.getDrawable("lastUp"),
 				rbySkin.getDrawable("lastDn"), rbySkin.getDrawable("lastCk"));
-		Button lastButton = new Button(lastStyle);
+		lastButton = new Button(lastStyle);
+		lastButton.setVisible(false);
+		
+		lastButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				state.finalRound = true;
+				passButton.setVisible(true);
+				lastButton.setDisabled(true);
+			}
+		});
 
 		rightMid.add(drawButton).width(50).height(40);
 		rightMid.add(lastButton).width(50).height(40);

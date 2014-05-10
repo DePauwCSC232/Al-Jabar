@@ -2,6 +2,9 @@ package edu.depauw.aljabar;
 
 import java.util.Random;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+
 public class GameState {
 	public GameState(int numPlayers) {
 		this.numPlayers = numPlayers;
@@ -57,6 +60,16 @@ public class GameState {
 	}
 	
 	public void nextPlayer() {
+		int total = 0;
+		for (int c : player[currentPlayer].count) {
+			total += c;
+		}
+		
+		if (total == 1) {
+			AlJabarGame.lastButton.getClickListener().clicked(null, 0, 0);
+		}
+		
+		disable(currentPlayer);
 		currentPlayer++;
 		if (currentPlayer == numPlayers) {
 			currentPlayer = 0;
@@ -64,5 +77,35 @@ public class GameState {
 				// TODO game over
 			}
 		}
+		enable(currentPlayer);
+		
+		for (int c : player[currentPlayer].count) {
+			total += c;
+		}
+		
+		if (total <= 3) {
+			AlJabarGame.lastButton.setVisible(true);
+		}
+	}
+	
+	private void disable(int p) {
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 10; col++) {
+				Button b = player[p].button[row][col];
+				b.setVisible(col < player[p].count[row]);
+				b.setDisabled(true);
+			}
+		}
+		AlJabarGame.player[p].setBackground((Drawable) null);
+	}
+	
+	private void enable(int p) {
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 10; col++) {
+				Button b = player[p].button[row][col];
+				b.setDisabled(false);
+			}
+		}
+		AlJabarGame.player[p].setBackground(AlJabarGame.highlight);
 	}
 }

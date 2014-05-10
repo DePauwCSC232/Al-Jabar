@@ -25,7 +25,7 @@ public class Player {
 
 		int color = 0;
 		for (Button b : selected) {
-			color = color ^ getColor(b);
+			color = color ^ Util.getColor(b);
 		}
 
 		for (Button b : selected) {
@@ -45,16 +45,11 @@ public class Player {
 	private boolean isSpectrum(Button button) {
 		int[] count = new int[8];
 
-		count[getColor(button)] = 1;
+		count[Util.getColor(button)] = 1;
 		for (Button b : selected) {
-			count[getColor(b)] = 1;
+			count[Util.getColor(b)] = 1;
 		}
 
 		return count[4] * count[2] * count[1] * count[7] == 1;
-	}
-
-	private int getColor(Button b) {
-		PlayerColor pc = (PlayerColor) b.getUserObject();
-		return pc.color;
 	}
 }
