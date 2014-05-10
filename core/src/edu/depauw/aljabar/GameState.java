@@ -92,6 +92,7 @@ public class GameState {
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 10; col++) {
 				Button b = player[p].button[row][col];
+				b.setChecked(false);
 				b.setVisible(col < player[p].count[row]);
 				b.setDisabled(true);
 			}
@@ -103,6 +104,7 @@ public class GameState {
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 10; col++) {
 				Button b = player[p].button[row][col];
+				b.setChecked(false);
 				b.setDisabled(false);
 			}
 		}

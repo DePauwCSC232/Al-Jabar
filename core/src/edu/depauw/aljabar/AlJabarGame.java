@@ -349,9 +349,9 @@ public class AlJabarGame extends ApplicationAdapter {
 				}
 				
 				for (Button b : state.center.selected) {
-					b.setChecked(false);
-					b.setVisible(false);
 					int color = Util.getColor(b);
+					b.setChecked(false);
+					if (color != 0) b.setVisible(false);
 					b.setStyle(bStyles[color]);
 
 					player1.button[color][player1.count[color]].setVisible(true);
