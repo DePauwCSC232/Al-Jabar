@@ -4,17 +4,21 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class AlJabarGame extends ApplicationAdapter {
 	private Stage stage;
+	private GameState state = new GameState(4);
+	public static ButtonStyle[] bStyles;
 
 	public void create () {
 		Skin rbySkin = new Skin();
@@ -33,6 +37,10 @@ public class AlJabarGame extends ApplicationAdapter {
 		rbySkin.add("lastUp", new Texture("last.png"));
 		rbySkin.add("lastDn", new Texture("last.png"));
 		rbySkin.add("lastCk", new Texture("lastSel.png"));
+
+		rbySkin.add("homeUp", new Texture("home.png"));
+		rbySkin.add("homeDn", new Texture("home.png"));
+		rbySkin.add("homeCk", new Texture("home.png"));
 
 		rbySkin.add("b000Up", new Texture("b000.png"));
 		rbySkin.add("b000Dn", new Texture("b000.png"));
@@ -86,35 +94,34 @@ public class AlJabarGame extends ApplicationAdapter {
 	    Texture button = new Texture("b000.png");
 	    float buttonWidth = button.getWidth();
 	    float buttonScale = 10 / buttonWidth; // make the buttons 10 logical units wide
-	    System.out.println(buttonWidth);
+
+	    bStyles = new ButtonStyle[8];
 	    
-	    ButtonStyle[] bStyle = new ButtonStyle[8];
+	    bStyles[0] = new ButtonStyle(rbySkin.getDrawable("b000Up"), rbySkin.getDrawable("b000Dn"), rbySkin.getDrawable("b000Ck"));
+	    Button b000a = new Button(bStyles[0]);
+	    Button b000b = new Button(bStyles[0]);
+	    Button b000c = new Button(bStyles[0]);
 	    
-	    bStyle[0] = new ButtonStyle(rbySkin.getDrawable("b000Up"), rbySkin.getDrawable("b000Dn"), rbySkin.getDrawable("b000Ck"));
-	    Button b000a = new Button(bStyle[0]);
-	    Button b000b = new Button(bStyle[0]);
-	    Button b000c = new Button(bStyle[0]);
+	    bStyles[1] = new ButtonStyle(rbySkin.getDrawable("b001Up"), rbySkin.getDrawable("b001Dn"), rbySkin.getDrawable("b001Ck"));
+	    Button b001 = new Button(bStyles[1]);
 	    
-	    bStyle[1] = new ButtonStyle(rbySkin.getDrawable("b001Up"), rbySkin.getDrawable("b001Dn"), rbySkin.getDrawable("b001Ck"));
-	    Button b001 = new Button(bStyle[1]);
+	    bStyles[2] = new ButtonStyle(rbySkin.getDrawable("b010Up"), rbySkin.getDrawable("b010Dn"), rbySkin.getDrawable("b010Ck"));
+	    Button b010 = new Button(bStyles[2]);
 	    
-	    bStyle[2] = new ButtonStyle(rbySkin.getDrawable("b010Up"), rbySkin.getDrawable("b010Dn"), rbySkin.getDrawable("b010Ck"));
-	    Button b010 = new Button(bStyle[2]);
+	    bStyles[3] = new ButtonStyle(rbySkin.getDrawable("b011Up"), rbySkin.getDrawable("b011Dn"), rbySkin.getDrawable("b011Ck"));
+	    Button b011 = new Button(bStyles[3]);
 	    
-	    bStyle[3] = new ButtonStyle(rbySkin.getDrawable("b011Up"), rbySkin.getDrawable("b011Dn"), rbySkin.getDrawable("b011Ck"));
-	    Button b011 = new Button(bStyle[3]);
+	    bStyles[4] = new ButtonStyle(rbySkin.getDrawable("b100Up"), rbySkin.getDrawable("b100Dn"), rbySkin.getDrawable("b100Ck"));
+	    Button b100 = new Button(bStyles[4]);
 	    
-	    bStyle[4] = new ButtonStyle(rbySkin.getDrawable("b100Up"), rbySkin.getDrawable("b100Dn"), rbySkin.getDrawable("b100Ck"));
-	    Button b100 = new Button(bStyle[4]);
+	    bStyles[5] = new ButtonStyle(rbySkin.getDrawable("b101Up"), rbySkin.getDrawable("b101Dn"), rbySkin.getDrawable("b101Ck"));
+	    Button b101 = new Button(bStyles[5]);
 	    
-	    bStyle[5] = new ButtonStyle(rbySkin.getDrawable("b101Up"), rbySkin.getDrawable("b101Dn"), rbySkin.getDrawable("b101Ck"));
-	    Button b101 = new Button(bStyle[5]);
+	    bStyles[6] = new ButtonStyle(rbySkin.getDrawable("b110Up"), rbySkin.getDrawable("b110Dn"), rbySkin.getDrawable("b110Ck"));
+	    Button b110 = new Button(bStyles[6]);
 	    
-	    bStyle[6] = new ButtonStyle(rbySkin.getDrawable("b110Up"), rbySkin.getDrawable("b110Dn"), rbySkin.getDrawable("b110Ck"));
-	    Button b110 = new Button(bStyle[6]);
-	    
-	    bStyle[7] = new ButtonStyle(rbySkin.getDrawable("b111Up"), rbySkin.getDrawable("b111Dn"), rbySkin.getDrawable("b111Ck"));
-	    Button b111 = new Button(bStyle[7]);
+	    bStyles[7] = new ButtonStyle(rbySkin.getDrawable("b111Up"), rbySkin.getDrawable("b111Dn"), rbySkin.getDrawable("b111Ck"));
+	    Button b111 = new Button(bStyles[7]);
 	    
 	    Group centerGroup = new Group();
 	    
@@ -170,6 +177,11 @@ public class AlJabarGame extends ApplicationAdapter {
 	    
 		center.add(centerGroup);
 	    
+//	    ButtonStyle homeStyle = new ButtonStyle(rbySkin.getDrawable("homeUp"), rbySkin.getDrawable("homeDn"), rbySkin.getDrawable("homeCk"));
+//	    Button homeButton = new Button(homeStyle);
+//	    
+//	    centerUp.add(homeButton).width(50).height(40);
+		
 	    center.add(centerUp); center.row();
 	    center.add(centerMid).width(100).height(100); center.row();
 	    center.add(centerDown);
@@ -193,8 +205,24 @@ public class AlJabarGame extends ApplicationAdapter {
 	    	Table pt = new Table();
 			
 			for (int row = 0; row < 8; row++) {
+				PlayerColor pc = new PlayerColor(state.getPlayer(i), row);
+				
 				for (int col = 0; col < 10; col++) {
-					Button b = new Button(bStyle[row]);
+					Button b = new Button(bStyles[row]);
+					b.setUserObject(pc);
+					b.addListener(new ClickListener() {
+
+						@Override
+						public void clicked(InputEvent event, float x, float y) {
+							super.clicked(event, x, y);
+							
+							Button actor = (Button) event.getListenerActor();
+							PlayerColor pc1 = (PlayerColor) (actor.getUserObject());
+							pc1.player.handle(actor, pc1.color);
+						}
+						
+					});
+//					b.setVisible(col <= row);
 					pt.add(b).width(10).height(10);
 				}
 				pt.row();
@@ -228,7 +256,7 @@ public class AlJabarGame extends ApplicationAdapter {
 	    table.add(center).width(100);
 	    table.add(right).width(100);
 	    
-	    table.debug();
+//	    table.debug();
 	}
 
 	public void resize (int width, int height) {

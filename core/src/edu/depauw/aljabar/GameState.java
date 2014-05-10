@@ -8,6 +8,15 @@ public class GameState {
 		finalRound = false;
 	}
 	
+	public Player getPlayer(int i)
+	{
+		if (player[i] == null) {
+			player[i] = new Player();
+		}
+		
+		return player[i];
+	}
+	
 	private Player[] player;
 	private Player bag;
 	private Center center;
