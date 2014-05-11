@@ -39,10 +39,13 @@ public class GameState {
 	private Random rand = new Random();
 	
 	public int draw() {
-		// TODO can we ever exhaust the bag?
 		int total = 0;
 		for (int c : bag.count) {
 			total += c;
+		}
+		
+		if (total == 1) {
+			AlJabarGame.drawButton.setVisible(false);
 		}
 		
 		int choice = rand.nextInt(total);

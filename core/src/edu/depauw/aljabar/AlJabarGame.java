@@ -23,6 +23,7 @@ public class AlJabarGame extends ApplicationAdapter {
 	public static Button playButton;
 	public static Button passButton;
 	public static Button lastButton;
+	public static Button drawButton;
 	public static Table[] player;
 	public static Drawable highlight;
 
@@ -79,10 +80,10 @@ public class AlJabarGame extends ApplicationAdapter {
 		rbySkin.add("b111Up", new Texture("b111.png"));
 		rbySkin.add("b111Dn", new Texture("b111.png"));
 		rbySkin.add("b111Ck", new Texture("b111SelA.png"));
-		
+
 		rbySkin.add("highlight", new Texture("highlight.png"));
-		
-		highlight = rbySkin.getDrawable("highlight"); 
+
+		highlight = rbySkin.getDrawable("highlight");
 
 		stage = new Stage(new StretchViewport(300, 200));
 		Gdx.input.setInputProcessor(stage);
@@ -340,55 +341,76 @@ public class AlJabarGame extends ApplicationAdapter {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				super.clicked(event, x, y);
-				
+
 				Player player1 = state.player[state.currentPlayer];
 				for (Button b : player1.selected) {
 					b.setChecked(false);
 					b.setVisible(false);
 					b.setStyle(bStyles[Util.getColor(b)]);
 				}
-				
+
 				for (Button b : state.center.selected) {
 					int color = Util.getColor(b);
 					b.setChecked(false);
-					if (color != 0) b.setVisible(false);
+					if (color != 0)
+						b.setVisible(false);
 					b.setStyle(bStyles[color]);
 
-					player1.button[color][player1.count[color]].setVisible(true);
+					player1.button[color][player1.count[color]]
+							.setVisible(true);
 					player1.count[color]++;
-					state.center.count[color]--;
+					if (color != 0)
+						state.center.count[color]--;
 				}
-				
+
 				int[] oldCount = state.center.count.clone();
-				
+
 				for (Button b : player1.selected) {
 					PlayerColor pc = (PlayerColor) b.getUserObject();
 					int color = pc.color;
-					
+
 					if (oldCount[color] == 1) {
 						oldCount[color] = 0;
 						for (int i = 0; i < state.numPlayers; i++) {
-							if (i == state.currentPlayer) continue;
+							if (i == state.currentPlayer)
+								continue;
 							Player player2 = state.player[i];
-							player2.button[0][player2.count[0]].setVisible(true);
+							player2.button[0][player2.count[0]]
+									.setVisible(true);
 							player2.count[0]++;
 
 						}
 					}
-					
-					state.center.count[color] = (state.center.count[color] + 1) % 2;
-					switch (color) {
-					case 1: b001.setVisible(state.center.count[color] == 1); break;
-					case 2: b010.setVisible(state.center.count[color] == 1); break;
-					case 3: b011.setVisible(state.center.count[color] == 1); break;
-					case 4: b100.setVisible(state.center.count[color] == 1); break;
-					case 5: b101.setVisible(state.center.count[color] == 1); break;
-					case 6: b110.setVisible(state.center.count[color] == 1); break;
-					case 7: b111.setVisible(state.center.count[color] == 1); break;
+
+					if (color != 0) {
+						state.center.count[color] = (state.center.count[color] + 1) % 2;
+						switch (color) {
+						case 1:
+							b001.setVisible(state.center.count[color] == 1);
+							break;
+						case 2:
+							b010.setVisible(state.center.count[color] == 1);
+							break;
+						case 3:
+							b011.setVisible(state.center.count[color] == 1);
+							break;
+						case 4:
+							b100.setVisible(state.center.count[color] == 1);
+							break;
+						case 5:
+							b101.setVisible(state.center.count[color] == 1);
+							break;
+						case 6:
+							b110.setVisible(state.center.count[color] == 1);
+							break;
+						case 7:
+							b111.setVisible(state.center.count[color] == 1);
+							break;
+						}
 					}
 					player1.count[color]--;
 				}
-				
+
 				player1.selected.clear();
 				state.center.selected.clear();
 				state.nextPlayer();
@@ -449,7 +471,7 @@ public class AlJabarGame extends ApplicationAdapter {
 		leftDown.add(player[3]);
 		rightUp.add(player[1]);
 		rightDown.add(player[2]);
-		
+
 		player[0].setBackground(highlight);
 
 		left.add(leftUp);
@@ -460,7 +482,7 @@ public class AlJabarGame extends ApplicationAdapter {
 
 		ButtonStyle drawStyle = new ButtonStyle(rbySkin.getDrawable("drawUp"),
 				rbySkin.getDrawable("drawDn"), rbySkin.getDrawable("drawCk"));
-		Button drawButton = new Button(drawStyle);
+		drawButton = new Button(drawStyle);
 
 		drawButton.addListener(new ClickListener() {
 			@Override
@@ -477,7 +499,7 @@ public class AlJabarGame extends ApplicationAdapter {
 				rbySkin.getDrawable("lastDn"), rbySkin.getDrawable("lastCk"));
 		lastButton = new Button(lastStyle);
 		lastButton.setVisible(false);
-		
+
 		lastButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
