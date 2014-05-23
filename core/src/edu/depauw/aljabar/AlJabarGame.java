@@ -114,36 +114,56 @@ public class AlJabarGame extends ApplicationAdapter {
 		Button b000a = new Button(bStyles[0]);
 		Button b000b = new Button(bStyles[0]);
 		Button b000c = new Button(bStyles[0]);
-
+		
+		final Button[] centerButton = new Button[8];
+		
 		bStyles[1] = new ButtonStyle(rbySkin.getDrawable("b001Up"),
 				rbySkin.getDrawable("b001Dn"), rbySkin.getDrawable("b001Ck"));
-		final Button b001 = new Button(bStyles[1]);
 
 		bStyles[2] = new ButtonStyle(rbySkin.getDrawable("b010Up"),
 				rbySkin.getDrawable("b010Dn"), rbySkin.getDrawable("b010Ck"));
-		final Button b010 = new Button(bStyles[2]);
 
 		bStyles[3] = new ButtonStyle(rbySkin.getDrawable("b011Up"),
 				rbySkin.getDrawable("b011Dn"), rbySkin.getDrawable("b011Ck"));
-		final Button b011 = new Button(bStyles[3]);
 
 		bStyles[4] = new ButtonStyle(rbySkin.getDrawable("b100Up"),
 				rbySkin.getDrawable("b100Dn"), rbySkin.getDrawable("b100Ck"));
-		final Button b100 = new Button(bStyles[4]);
 
 		bStyles[5] = new ButtonStyle(rbySkin.getDrawable("b101Up"),
 				rbySkin.getDrawable("b101Dn"), rbySkin.getDrawable("b101Ck"));
-		final Button b101 = new Button(bStyles[5]);
 
 		bStyles[6] = new ButtonStyle(rbySkin.getDrawable("b110Up"),
 				rbySkin.getDrawable("b110Dn"), rbySkin.getDrawable("b110Ck"));
-		final Button b110 = new Button(bStyles[6]);
 
 		bStyles[7] = new ButtonStyle(rbySkin.getDrawable("b111Up"),
 				rbySkin.getDrawable("b111Dn"), rbySkin.getDrawable("b111Ck"));
-		final Button b111 = new Button(bStyles[7]);
 
 		Group centerGroup = new Group();
+		
+		int[] bx = new int[] {0,  35, -45,  -5,  -5,  15, -25,  -5};
+		int[] by = new int[] {0, -75, -75, -75, -15, -45, -45, -55};
+
+		for (int i = 1; i < 8; i++) {
+			Button b = new Button(bStyles[i]);
+			b.setTransform(true);
+			b.setScale(buttonScale);
+			b.setPosition(bx[i], by[i]);
+			b.setUserObject(new PlayerColor(state.center, i));
+			b.addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					super.clicked(event, x, y);
+
+					Button actor = (Button) event.getListenerActor();
+					PlayerColor pc1 = (PlayerColor) (actor.getUserObject());
+					pc1.player.handle(actor, pc1.color, state);
+				}
+			});
+			b.setVisible(state.center.count[i] == 1);
+			centerGroup.addActor(b);
+			
+			centerButton[i] = b;
+		}
 
 		b000a.setTransform(true);
 		b000a.setScale(buttonScale);
@@ -192,125 +212,6 @@ public class AlJabarGame extends ApplicationAdapter {
 			}
 		});
 		centerGroup.addActor(b000c);
-
-		b001.setTransform(true);
-		b001.setScale(buttonScale);
-		b001.setPosition(35, -75);
-		b001.setUserObject(new PlayerColor(state.center, 1));
-		b001.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				super.clicked(event, x, y);
-
-				Button actor = (Button) event.getListenerActor();
-				PlayerColor pc1 = (PlayerColor) (actor.getUserObject());
-				pc1.player.handle(actor, pc1.color, state);
-			}
-		});
-		b001.setVisible(state.center.count[1] == 1);
-		centerGroup.addActor(b001);
-
-		b010.setTransform(true);
-		b010.setScale(buttonScale);
-		b010.setPosition(-45, -75);
-		b010.setUserObject(new PlayerColor(state.center, 2));
-		b010.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				super.clicked(event, x, y);
-
-				Button actor = (Button) event.getListenerActor();
-				PlayerColor pc1 = (PlayerColor) (actor.getUserObject());
-				pc1.player.handle(actor, pc1.color, state);
-			}
-		});
-		b010.setVisible(state.center.count[2] == 1);
-		centerGroup.addActor(b010);
-
-		b011.setTransform(true);
-		b011.setScale(buttonScale);
-		b011.setPosition(-5, -75);
-		b011.setUserObject(new PlayerColor(state.center, 3));
-		b011.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				super.clicked(event, x, y);
-
-				Button actor = (Button) event.getListenerActor();
-				PlayerColor pc1 = (PlayerColor) (actor.getUserObject());
-				pc1.player.handle(actor, pc1.color, state);
-			}
-		});
-		b011.setVisible(state.center.count[3] == 1);
-		centerGroup.addActor(b011);
-
-		b100.setTransform(true);
-		b100.setScale(buttonScale);
-		b100.setPosition(-5, -15);
-		b100.setUserObject(new PlayerColor(state.center, 4));
-		b100.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				super.clicked(event, x, y);
-
-				Button actor = (Button) event.getListenerActor();
-				PlayerColor pc1 = (PlayerColor) (actor.getUserObject());
-				pc1.player.handle(actor, pc1.color, state);
-			}
-		});
-		b100.setVisible(state.center.count[4] == 1);
-		centerGroup.addActor(b100);
-
-		b101.setTransform(true);
-		b101.setScale(buttonScale);
-		b101.setPosition(15, -45);
-		b101.setUserObject(new PlayerColor(state.center, 5));
-		b101.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				super.clicked(event, x, y);
-
-				Button actor = (Button) event.getListenerActor();
-				PlayerColor pc1 = (PlayerColor) (actor.getUserObject());
-				pc1.player.handle(actor, pc1.color, state);
-			}
-		});
-		b101.setVisible(state.center.count[5] == 1);
-		centerGroup.addActor(b101);
-
-		b110.setTransform(true);
-		b110.setScale(buttonScale);
-		b110.setPosition(-25, -45);
-		b110.setUserObject(new PlayerColor(state.center, 6));
-		b110.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				super.clicked(event, x, y);
-
-				Button actor = (Button) event.getListenerActor();
-				PlayerColor pc1 = (PlayerColor) (actor.getUserObject());
-				pc1.player.handle(actor, pc1.color, state);
-			}
-		});
-		b110.setVisible(state.center.count[6] == 1);
-		centerGroup.addActor(b110);
-
-		b111.setTransform(true);
-		b111.setScale(buttonScale);
-		b111.setPosition(-5, -55);
-		b111.setUserObject(new PlayerColor(state.center, 7));
-		b111.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				super.clicked(event, x, y);
-
-				Button actor = (Button) event.getListenerActor();
-				PlayerColor pc1 = (PlayerColor) (actor.getUserObject());
-				pc1.player.handle(actor, pc1.color, state);
-			}
-		});
-		b111.setVisible(state.center.count[7] == 1);
-		centerGroup.addActor(b111);
 
 		center.add(centerGroup);
 
@@ -384,29 +285,7 @@ public class AlJabarGame extends ApplicationAdapter {
 
 					if (color != 0) {
 						state.center.count[color] = (state.center.count[color] + 1) % 2;
-						switch (color) {
-						case 1:
-							b001.setVisible(state.center.count[color] == 1);
-							break;
-						case 2:
-							b010.setVisible(state.center.count[color] == 1);
-							break;
-						case 3:
-							b011.setVisible(state.center.count[color] == 1);
-							break;
-						case 4:
-							b100.setVisible(state.center.count[color] == 1);
-							break;
-						case 5:
-							b101.setVisible(state.center.count[color] == 1);
-							break;
-						case 6:
-							b110.setVisible(state.center.count[color] == 1);
-							break;
-						case 7:
-							b111.setVisible(state.center.count[color] == 1);
-							break;
-						}
+						centerButton[color].setVisible(state.center.count[color] == 1);
 					}
 					player1.count[color]--;
 				}

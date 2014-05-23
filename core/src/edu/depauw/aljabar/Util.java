@@ -13,7 +13,6 @@ public class Util {
 
 // Keep a to-do list here
 // TODO add disabled button images; use disabled instead of invisible for controls
-// TODO put colors in an array
 // TODO swappable themes? Gems, paint drops, ...
 // TODO refactor, refactor, refactor
 // TODO animated dealing & playing?
